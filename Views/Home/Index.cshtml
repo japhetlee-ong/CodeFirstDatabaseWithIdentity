@@ -1,0 +1,24 @@
+﻿@using CodeFirstDatabase.Models.Identity
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<ApplicationUser> SignInManager;
+@inject UserManager<ApplicationUser> UserManager;
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+
+    @{
+        if (SignInManager.IsSignedIn(User))
+        {
+            var roleClaim = User.Claims.FirstOrDefault(x => x.Type == System.Security.Claims.ClaimTypes.Role);
+            <h5>Hi @UserManager.GetUserName(User)!</h5>
+            <h6>You role is: @roleClaim!.Value</h6>
+        }
+    }
+
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
