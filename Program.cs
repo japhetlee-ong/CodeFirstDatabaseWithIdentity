@@ -17,7 +17,8 @@ builder.Services.AddIdentity<ApplicationUser,IdentityRole>(options =>
     options.SignIn.RequireConfirmedEmail = false;
     options.User.RequireUniqueEmail = true;
 }
-).AddEntityFrameworkStores<CodeFirstDbContext>();
+).AddEntityFrameworkStores<CodeFirstDbContext>().AddTokenProvider<DataProtectorTokenProvider<ApplicationUser>>(TokenOptions.DefaultProvider);
+;
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Login";
