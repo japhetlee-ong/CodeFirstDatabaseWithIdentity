@@ -42,10 +42,12 @@ namespace CodeFirstDatabase.Controllers
                     //UNSECURE = 25
                     var client = new SmtpClient("smtp.gmail.com", 587)
                     {
-                        Credentials = new NetworkCredential("jayzel.private@gmail.com","tokyooojd0604"),
-                        EnableSsl = false
+                        UseDefaultCredentials = false,
+                        Credentials = new NetworkCredential("email","password"),
+                        EnableSsl = true,
+                        DeliveryMethod = SmtpDeliveryMethod.Network
                     };
-                    client.Send("jayzel.private@gmail.com", model.Email,"Reset Password", $"Please reset your password by clicking <a href='{callbackUrl}'>here</a>.");
+                    client.Send("senderemail", model.Email,"Reset Password", $"Please reset your password by clicking <a href='{callbackUrl}'>here</a>.");
 
                     return RedirectToAction("ForgotPasswordConfirmation", "Account");
                 }
