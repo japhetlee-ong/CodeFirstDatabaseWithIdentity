@@ -1,19 +1,21 @@
 ﻿using CodeFirstDatabase.Models.Accounts;
 using CodeFirstDatabase.Models.Identity;
+using CodeFirstDatabase.Utils;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
-using System.Net.Mail;
 
 namespace CodeFirstDatabase.Controllers
 {
     public class ForgotPasswordController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IEmailService _emailService;
 
-        public ForgotPasswordController(UserManager<ApplicationUser> userManager)
+
+        public ForgotPasswordController(UserManager<ApplicationUser> userManager, IEmailService emailService)
         {
             _userManager = userManager;
+            _emailService = emailService;
         }
 
         [HttpGet]
@@ -40,14 +42,16 @@ namespace CodeFirstDatabase.Controllers
                     //    $"Please reset your password by clicking <a href='{callbackUrl}'>here</a>.");
                     //SECURE = 587
                     //UNSECURE = 25
-                    var client = new SmtpClient("smtp.gmail.com", 587)
-                    {
-                        UseDefaultCredentials = false,
-                        Credentials = new NetworkCredential("email","password"),
-                        EnableSsl = true,
-                        DeliveryMethod = SmtpDeliveryMethod.Network
-                    };
-                    client.Send("senderemail", model.Email,"Reset Password", $"Please reset your password by clicking <a href='{callbackUrl}'>here</a>.");
+                    //var client = new SmtpClient("smtp.gmail.com", 465)
+                    //{
+                    //    UseDefaultCredentials = false,
+                    //    Credentials = new NetworkCredential("japhetlee.ccf@gmail.com","kazuhira2403"),
+                    //    EnableSsl = true,
+                    //    DeliveryMethod = SmtpDeliveryMethod.Network
+                    //};
+                    //client.Send("japhetlee.ccf@gmail.com", model.Email,"Reset Password", $"Please reset your password by clicking <a href='{callbackUrl}'>here</a>.");
+
+                    await _emailService.SendEmailAsync(model.Email, "Reset Password", $"Please reset your password by clicking <a href='{callbackUrl}'>here</a>.");
 
                     return RedirectToAction("ForgotPasswordConfirmation", "Account");
                 }

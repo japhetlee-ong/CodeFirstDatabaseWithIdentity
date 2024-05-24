@@ -2,8 +2,14 @@ using CodeFirstDatabase.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using CodeFirstDatabase.Models.Identity;
+using CodeFirstDatabase.Models;
+using System.Configuration;
+using CodeFirstDatabase.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("SmtpSettings"));
+builder.Services.AddTransient<IEmailService, EmailService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
